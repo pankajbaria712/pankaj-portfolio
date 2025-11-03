@@ -55,19 +55,29 @@ const Contact = () => {
     message: "",
   });
 
-  // Handle input changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
-    // 2. Improved: Add actual form submission logic here (e.g., call an API, use a service like Formspree, etc.)
-    alert("Thank you for your message! (Submission mocked in console)");
-    // Reset form after submission
-    setFormData({ name: "", email: "", message: "" });
+
+    const res = await fetch("http://localhost:5000/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert("✅ Message sent successfully!");
+      setFormData({ name: "", email: "", message: "" }); // clear the form
+    } else {
+      alert("❌ Failed to send message. Try again.");
+    }
   };
 
   const animationVariants = {
