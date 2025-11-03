@@ -11,7 +11,7 @@ const app = express();
 // Allow your frontend deployed URL
 app.use(
   cors({
-    origin: ["https://pankaj-portfolio-ivory.vercel.app"],
+    origin: "https://pankaj-portfolio-ivory.vercel.app",
     methods: ["POST", "GET"],
   })
 );
