@@ -20,5 +20,3 @@ React • Tailwind CSS • Framer Motion • Lucide React • React Icons
 - 📧 Email: [pankajbaria712@gmail.com](mailto:pankajbaria712@gmail.com)  
 - 🐙 GitHub: [@pankajbaria712](https://github.com/pankajbaria712)  
 - 💼 LinkedIn: [Pankaj Baria](https://www.linkedin.com/in/pankaj-baria-619253274/)
-
----
