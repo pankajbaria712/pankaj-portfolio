@@ -14,6 +14,7 @@ const projects = [
     github:
       "https://github.com/pankajbaria712/Skill-Tracker-and-Personalized-Roadmap-Generator",
     demo: "https://skill-tracker-and-personalized-road.vercel.app/",
+    status: "In Progress",
   },
   {
     title: "Learn and Practice Typing Platform",
@@ -23,6 +24,7 @@ const projects = [
     github:
       "https://github.com/pankajbaria712/Learn-and-Practice-Typing-Platform",
     demo: "https://learn-and-practice-typing-platform-seven.vercel.app/",
+    status: "Completed",
   },
   {
     title: "Local Food Platform",
@@ -31,6 +33,7 @@ const projects = [
     img: project3,
     github: "https://github.com/pankajbaria712/local-food-platform",
     demo: "https://local-food-platform.vercel.app/",
+    status: "Completed",
   },
   {
     title: "Alvy Template Clone",
@@ -40,6 +43,7 @@ const projects = [
     github:
       "https://github.com/pankajbaria712/alvy-template.webflow.io-frontend-clone",
     demo: "https://pankajbaria712.github.io/alvy-template.webflow.io-frontend-clone/",
+    status: "In Progress",
   },
 ];
 
@@ -102,6 +106,9 @@ const Projects = () => {
                     Live Demo <ArrowUpRight size={18} />
                   </a>
                 )}
+                <span className="text-sky-400 hover:text-white flex items-center gap-1 font-semibold transition-all duration-30">
+                  {project.status}
+                </span>
               </div>
             </div>
           </motion.div>
