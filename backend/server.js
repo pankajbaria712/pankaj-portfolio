@@ -36,14 +36,41 @@ app.post("/send", async (req, res) => {
   try {
     // Create email content
     const htmlContent = `
-      <h2>📩 New Message from Portfolio</h2>
-      <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-      <p><strong>Message:</strong><br>${escapeHtml(message).replace(
-        /\n/g,
-        "<br>"
+  <div style="
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+    color: #111827;
+  ">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h2 style="color: #2563eb; margin: 0;">📩 New Message from Your Portfolio</h2>
+      <p style="font-size: 14px; color: #6b7280;">Someone just reached out to you via your website!</p>
+    </div>
+
+    <div style="background-color: #ffffff; padding: 15px 20px; border-radius: 8px;">
+      <p style="margin: 0 0 10px 0;"><strong>👤 Name:</strong> ${escapeHtml(
+        name
       )}</p>
-    `;
+      <p style="margin: 0 0 10px 0;"><strong>📧 Email:</strong> ${escapeHtml(
+        email
+      )}</p>
+      <p style="margin: 0;"><strong>💬 Message:</strong></p>
+      <div style="margin-top: 8px; padding: 10px; background: #f3f4f6; border-radius: 6px;">
+        ${escapeHtml(message).replace(/\n/g, "<br>")}
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px; font-size: 13px; color: #6b7280;">
+      <p>🚀 Sent automatically from your <strong>Portfolio Contact Form</strong></p>
+      <a href="https://pankaj-portfolio-ivory.vercel.app" 
+         style="color: #2563eb; text-decoration: none;">Visit Portfolio</a>
+    </div>
+  </div>
+`;
 
     // Send via Resend API
     const response = await fetch("https://api.resend.com/emails", {
