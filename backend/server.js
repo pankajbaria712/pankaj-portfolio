@@ -11,10 +11,10 @@ const app = express();
 app.use(
   cors({
     origin: "https://pankaj-portfolio-ivory.vercel.app",
-    methods: ["POST", "GET"],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
   })
 );
-
 // ------------------ Body Parser ------------------
 app.use(express.json());
 
