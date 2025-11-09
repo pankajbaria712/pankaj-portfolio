@@ -1,14 +1,13 @@
-// server.js
 import express from "express";
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import cors from "cors";
+// (If Node <18, uncomment next line)
+// import fetch from "node-fetch";
 
 dotenv.config();
 const app = express();
 
 // ------------------ CORS Setup ------------------
-// Allow your frontend deployed URL
 app.use(
   cors({
     origin: "https://pankaj-portfolio-ivory.vercel.app",
@@ -21,7 +20,7 @@ app.use(express.json());
 
 // ------------------ Routes ------------------
 app.get("/", (req, res) => {
-  res.send("🚀 Portfolio Contact Backend is running!");
+  res.send("🚀 Portfolio Contact Backend (Resend) is running!");
 });
 
 app.post("/send", async (req, res) => {
@@ -35,31 +34,63 @@ app.post("/send", async (req, res) => {
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER, // Your Gmail
-        pass: process.env.EMAIL_PASS, // App password
+    // Create email content
+    const htmlContent = `
+      <h2>📩 New Message from Portfolio</h2>
+      <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+      <p><strong>Message:</strong><br>${escapeHtml(message).replace(
+        /\n/g,
+        "<br>"
+      )}</p>
+    `;
+
+    // Send via Resend API
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        from: process.env.RESEND_FROM,
+        to: [process.env.RESEND_TO],
+        subject: `New message from ${name}`,
+        html: htmlContent,
+      }),
     });
 
-    const mailOptions = {
-      from: email,
-      to: process.env.EMAIL_USER,
-      subject: `New message from ${name}`,
-      text: `📩 You received a new message from your portfolio contact form:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-    };
+    const data = await response.json();
 
-    await transporter.sendMail(mailOptions);
+    if (!response.ok) {
+      console.error("Resend API Error:", data);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to send email via Resend.",
+      });
+    }
 
-    res
-      .status(200)
-      .json({ success: true, message: "Email sent successfully!" });
+    res.status(200).json({
+      success: true,
+      message: "Email sent successfully via Resend!",
+    });
   } catch (error) {
     console.error("Error sending email:", error);
-    res.status(500).json({ success: false, message: "Failed to send email." });
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
   }
 });
+
+// Helper function to avoid XSS injection
+function escapeHtml(str = "") {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
 // ------------------ Start Server ------------------
 const PORT = process.env.PORT || 5000;
